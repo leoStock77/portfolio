@@ -1,0 +1,33 @@
+---
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith("/") ? rawBase : `${rawBase}/`;
+
+const ISTOCK_URL = "https://www.istockphoto.com/portfolio/leotenorio?assettype=image%2Cfilm";
+---
+
+<section class="section-hero" aria-label="Presentación">
+  <div class="section-hero__inner">
+    <div class="section-hero__content">
+      <p class="section-hero__eyebrow">Fotografía para licenciamiento y marcas</p>
+
+      <h1 class="section-hero__title">LeoStock77</h1>
+
+      <p class="section-hero__subtitle">
+        Produzco imágenes listas para campañas, contenido y stock. Descubrí el portfolio y contactame para propuestas.
+      </p>
+
+      <div class="section-hero__cta">
+        <a class="btn btn--primary" href={`${base}#contact`}>Contactar</a>
+        <a class="btn btn--secondary" href={ISTOCK_URL} target="_blank" rel="noopener">
+          Ver iStock
+        </a>
+      </div>
+    </div>
+
+    <div class="section-hero__media" aria-hidden="true">
+      <div class="section-hero__media-inner">
+        <div class="placeholder">Hero image placeholder</div>
+      </div>
+    </div>
+  </div>
+</section>

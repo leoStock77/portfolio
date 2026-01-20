@@ -2,13 +2,59 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import Header from "../shared/Header.astro";
 import Footer from "../shared/Footer.astro";
+import SectionHero from "../sections/SectionHero.astro";
 ---
 
-<MainLayout title="LeoStock77 — Inicio">
+<MainLayout title="Leo Stock — Inicio">
   <Header slot="header" />
 
-  <h1>LeoStock77</h1>
-  <p>Home (placeholder). Aquí van las secciones: Hero, Cómo funciona, Portfolio, Videos, Stock 101, About, Contacto.</p>
+  <SectionHero />
+
+  <section id="how" class="section">
+    <div class="section__inner">
+      <h2>Cómo funciona</h2>
+      <div class="card">
+        Placeholder: aquí van 3 cards (Tú ganas / Yo gano / Transparencia).
+      </div>
+    </div>
+  </section>
+
+  <section id="portfolio" class="section">
+    <div class="section__inner">
+      <h2>Portafolio</h2>
+      <div class="card">Placeholder: aquí van 3 carouseles (lifestyle / food / business).</div>
+    </div>
+  </section>
+
+  <section id="videos" class="section">
+    <div class="section__inner">
+      <h2>Videos</h2>
+      <div class="card">Placeholder: grid de videos Vimeo embebidos.</div>
+    </div>
+  </section>
+
+  <section id="stock101" class="section">
+    <div class="section__inner">
+      <h2>Stock 101</h2>
+      <div class="card">Placeholder: aquí va un accordion con FAQs.</div>
+    </div>
+  </section>
+
+  <section id="about" class="section">
+    <div class="section__inner">
+      <h2>Sobre mí</h2>
+      <div class="card">Placeholder: bento (foto + bio + badges).</div>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="section__inner">
+      <h2>Contacto</h2>
+      <div class="card">
+        Placeholder: aquí va el formulario (WhatsApp/mailto) con validación.
+      </div>
+    </div>
+  </section>
 
   <Footer slot="footer" />
 </MainLayout>
