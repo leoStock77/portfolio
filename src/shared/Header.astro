@@ -1,9 +1,25 @@
-<header>
-  <nav aria-label="Navegación principal">
-    <a href="/">Inicio</a>
-    <a href="/portfolio">Portfolio</a>
-    <a href="/stock">Stock</a>
-    <a href="/privacy">Privacidad</a>
-    <a href="/terms">Términos</a>
-  </nav>
+---
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith("/") ? rawBase : `${rawBase}/`;
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="site-header__brand" href={base} aria-label="Ir a inicio">
+      <span class="site-header__logo" aria-hidden="true">📷</span>
+      <span class="site-header__name">LEO</span>
+    </a>
+
+    <nav class="site-header__nav" aria-label="Navegación principal">
+      <a class="site-header__link" href={base}>Inicio</a>
+      <a class="site-header__link" href={`${base}#how`}>Cómo funciona</a>
+      <a class="site-header__link" href={`${base}portfolio`}>Portafolio</a>
+      <a class="site-header__link" href={`${base}stock`}>Stock 101</a>
+      <a class="site-header__link" href={`${base}#about`}>Sobre mí</a>
+    </nav>
+
+    <a class="btn btn--secondary site-header__cta" href={`${base}#contact`}>
+      Contactar
+    </a>
+  </div>
 </header>
