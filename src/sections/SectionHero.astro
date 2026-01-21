@@ -3,31 +3,44 @@ const rawBase = import.meta.env.BASE_URL;
 const base = rawBase.endsWith("/") ? rawBase : `${rawBase}/`;
 
 const ISTOCK_URL = "https://www.istockphoto.com/portfolio/leotenorio?assettype=image%2Cfilm";
+const HERO_IMAGE_URL = `${base}images/hero/hero.webp`;
 ---
 
-<section class="section-hero" aria-label="Presentación">
+<section class="section-hero" style={`--hero-bg: url('${HERO_IMAGE_URL}')`} aria-label="Hero">
   <div class="section-hero__inner">
-    <div class="section-hero__content">
-      <p class="section-hero__eyebrow">Fotografía para licenciamiento y marcas</p>
+    <p class="section-hero__eyebrow">Fotografía comercial + stock</p>
 
-      <h1 class="section-hero__title">LeoStock77</h1>
-
-      <p class="section-hero__subtitle">
-        Produzco imágenes listas para campañas, contenido y stock. Descubrí el portfolio y contactame para propuestas.
-      </p>
-
-      <div class="section-hero__cta">
-        <a class="btn btn--primary" href={`${base}#contact`}>Contactar</a>
-        <a class="btn btn--secondary" href={ISTOCK_URL} target="_blank" rel="noopener">
-          Ver iStock
-        </a>
-      </div>
+    <div class="section-hero__pill" aria-label="Estado">
+      Portafolio activo en iStock
     </div>
 
-    <div class="section-hero__media" aria-hidden="true">
-      <div class="section-hero__media-inner">
-        <div class="placeholder">Hero image placeholder</div>
-      </div>
+    <h1 class="section-hero__title">
+      Fotos profesionales <span class="section-hero__accent">listas para usar</span>
+    </h1>
+
+    <p class="section-hero__subtitle">
+      Tú obtienes un catálogo para tu marca y redes. Yo monetizo con licencias internacionales.
+      Ambos ganamos.
+    </p>
+
+    <div class="section-hero__cta">
+      <a class="btn btn--primary" href={`${base}#contact`}>Solicitar cambio fotográfico</a>
+      <a class="btn btn--secondary" href={ISTOCK_URL} target="_blank" rel="noopener noreferrer">
+        Ver mi catálogo stock
+      </a>
+    </div>
+
+    <div class="section-hero__meta" aria-label="Credenciales">
+      <span class="section-hero__meta-item">Costa Rica</span>
+      <span class="section-hero__meta-item">Trabajo remoto</span>
+      <span class="section-hero__meta-item">Istock Exlusivo</span>
     </div>
   </div>
+
+<div class="hero-scroll" aria-hidden="true">
+  <svg class="hero-scroll__icon" width="18" height="18" viewBox="0 0 24 24">
+    <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+</div>
+
 </section>

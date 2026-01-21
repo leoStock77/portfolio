@@ -1,0 +1,64 @@
+---
+import "../styles/modulo2-carousel.css";
+import modulo2Script from "../js/modulo2-carousel.js?url";
+
+const base = import.meta.env.BASE_URL;
+
+// Tiles -> /gallery#anchor (anchors estables para deep-links) [file:23]
+const items = [
+  { label: "Family, As We Are.", slug: "family-as-we-are", img: `${base}images/modulo-2-carousel/tile-1.webp` },
+  { label: "Entrepreneurs", slug: "entrepreneurs", img: `${base}images/modulo-2-carousel/tile-2.webp` },
+  { label: "Early Joys", slug: "early-joys", img: `${base}images/modulo-2-carousel/tile-3.webp` },
+  { label: "Authentic Everyday Stories", slug: "authentic-everyday-stories", img: `${base}images/modulo-2-carousel/tile-4.webp` },
+  { label: "Working Lives: Passion, Purpose & Profession", slug: "working-lives", img: `${base}images/modulo-2-carousel/tile-5.webp` },
+  { label: "Coffee Experience", slug: "coffee-experience", img: `${base}images/modulo-2-carousel/tile-6.webp` },
+  { label: "Landscapes & Textures", slug: "landscapes-textures", img: `${base}images/modulo-2-carousel/tile-7.webp` },
+  { label: "Wild Moments", slug: "wild-moments", img: `${base}images/modulo-2-carousel/tile-8.webp` },
+];
+---
+
+<section class="m2" id="modulo-2" data-m2>
+  <div class="m2__inner">
+   
+    <div class="m2__carousel" data-m2-carousel>
+      <div class="m2__track" data-m2-track>
+        {items.map((it, idx) => (
+          <a
+            class="m2__tile"
+            href={`${base}gallery#${it.slug}`}
+            data-m2-index={idx}
+            aria-label={it.label}
+          >
+            <div class="m2__frame">
+              <img
+                class="m2__img"
+                src={it.img}
+                alt={it.label}
+                loading="lazy"
+                width="720"
+                height="720"
+              />
+              <div class="m2__overlay">
+                <div class="m2__label">{it.label}</div>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <div class="m2__dots" data-m2-dots aria-label="Navegación del carrusel">
+      {items.map((_, i) => (
+        <button
+          class={`m2__dot ${i === 0 ? "is-active" : ""}`}
+          type="button"
+          data-m2-dot={i}
+          aria-label={`Ir a ${i + 1}`}
+          aria-current={i === 0 ? "true" : "false"}
+        />
+      ))}
+    </div>
+  </div>
+
+  <script type="module" src={modulo2Script}></script>
+</section>

@@ -1,0 +1,203 @@
+/* Module 2 — Infinite Tiles Carousel (curva + fade) */
+
+.m2 {
+    padding: var(--space-2xl) var(--space-m);
+    background: var(--color-bg-primary);
+}
+
+.m2__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.m2__header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.m2__title {
+    font-size: var(--fs-h2-mobile);
+    font-weight: var(--fw-h2);
+    color: var(--color-text);
+    margin: 0 0 var(--space-m);
+}
+
+.m2__subtitle {
+    margin: 0;
+    color: var(--color-text-secondary);
+}
+
+/* Container */
+.m2__carousel {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Fade edges (desktop feel) */
+.m2__carousel::before,
+.m2__carousel::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 16%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0;
+    /* se activa en desktop */
+}
+
+.m2__carousel::before {
+    left: 0;
+    background: linear-gradient(to right, var(--color-bg-primary) 0%, rgba(245, 245, 240, 0) 100%);
+}
+
+.m2__carousel::after {
+    right: 0;
+    background: linear-gradient(to left, var(--color-bg-primary) 0%, rgba(245, 245, 240, 0) 100%);
+}
+
+/* Track */
+.m2__track {
+    display: flex;
+    gap: var(--space-m);
+    transform: translateX(0px);
+    will-change: transform;
+    padding: 6px 0;
+}
+
+/* Mobile: tiles más pequeños + peek */
+.m2__tile {
+    flex: 0 0 74vw;
+    text-decoration: none;
+    color: inherit;
+}
+
+.m2__frame {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    background: var(--color-white);
+    box-shadow: var(--shadow-sm);
+    transition: transform 250ms ease-out, box-shadow 250ms ease-out, opacity 250ms ease-out;
+
+    /* Curva orgánica */
+    clip-path: polygon(0% 0%, 2% 1%, 4% 2%, 6% 2.5%, 8% 3%, 10% 3.2%,
+            90% 0%, 92% 2%, 94% 3%, 96% 3.5%, 98% 3.8%, 100% 4%,
+            100% 96%, 98% 97%, 96% 98%, 94% 98.5%, 92% 99%, 90% 99.2%,
+            10% 100%, 8% 98.5%, 6% 97.5%, 4% 97%, 2% 96.5%, 0% 96%);
+}
+
+.m2__tile:focus-visible .m2__frame {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+}
+
+.m2__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transform: scale(1.02);
+    transition: transform 250ms ease-out;
+}
+
+.m2__overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    align-items: end;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, .55) 100%);
+}
+
+.m2__label {
+    padding: 14px 14px 16px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+@media (hover: hover) {
+    .m2__tile:hover .m2__frame {
+        transform: translateY(-3px) scale(1.01);
+        box-shadow: var(--shadow-md);
+    }
+
+    .m2__tile:hover .m2__img {
+        transform: scale(1.08);
+    }
+}
+
+/* Dots */
+.m2__dots {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-s);
+    padding: var(--space-l) 0 0;
+}
+
+.m2__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    border: 0;
+    background: var(--color-border);
+    cursor: pointer;
+    padding: 0;
+    transition: transform 150ms ease-out, background 150ms ease-out;
+}
+
+.m2__dot.is-active {
+    background: var(--color-primary);
+    transform: scale(1.25);
+}
+
+/* Desktop: 5 visibles + arco + fades activos */
+@media (min-width: 768px) {
+    .m2 {
+        padding: var(--space-3xl) var(--space-l);
+    }
+
+    .m2__title {
+        font-size: var(--fs-h2);
+    }
+
+    .m2__track {
+        gap: var(--space-l);
+    }
+
+    .m2__tile {
+        flex: 0 0 calc((100% - (var(--space-l) * 4)) / 5);
+    }
+
+    .m2__carousel::before,
+    .m2__carousel::after {
+        opacity: 1;
+    }
+
+    /* Efecto arco: los laterales “caen” y se atenúan */
+    .m2__tile:nth-child(1) .m2__frame,
+    .m2__tile:nth-child(7) .m2__frame {
+        transform: translateY(18px) scale(0.92);
+        opacity: 0.65;
+    }
+
+    .m2__tile:nth-child(2) .m2__frame,
+    .m2__tile:nth-child(6) .m2__frame {
+        transform: translateY(10px) scale(0.96);
+        opacity: 0.8;
+    }
+
+    .m2__tile:nth-child(3) .m2__frame,
+    .m2__tile:nth-child(5) .m2__frame {
+        transform: translateY(3px) scale(1.0);
+        opacity: 1;
+    }
+
+    .m2__tile:nth-child(4) .m2__frame {
+        transform: translateY(0px) scale(1.02);
+        opacity: 1;
+    }
+}
