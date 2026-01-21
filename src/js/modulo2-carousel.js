@@ -1,64 +1,61 @@
-// Module 2 — Infinite carousel (sin clones): reordena el DOM tras la transición
-// - Mobile swipe
-// - Dots
-// - Prefers reduced motion
-// - Compatible con Astro (re-init en astro:after-swap)
-
 function initModulo2(root) {
-    const track = root.querySelector("[data-m2-track]");
-    const dotsWrap = root.querySelector("[data-m2-dots]");
-    const dots = dotsWrap ? [...dotsWrap.querySelectorAll("[data-m2-dot]")] : [];
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!root || root.dataset.m2Ready === "true") return;
+    root.dataset.m2Ready = "true";
+
+    var track = root.querySelector("[data-m2-track]");
+    var dotsWrap = root.querySelector("[data-m2-dots]");
+    var dots = dotsWrap ? Array.from(dotsWrap.querySelectorAll("[data-m2-dot]")) : [];
+    var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (!track) return;
 
-    const state = { animating: false };
+    var state = { animating: false };
 
-    const activePos = () => (window.innerWidth >= 768 ? 2 : 0); // desktop “centro” (3er tile), mobile 1er tile
-
-    const getGapPx = () => {
-        const gap = getComputedStyle(track).gap || "0px";
+    function getGapPx() {
+        var gap = getComputedStyle(track).gap || "0px";
         return Number.parseFloat(gap) || 0;
-    };
+    }
 
-    const getStepPx = () => {
-        const first = track.querySelector(".m2__tile");
+    function getStepPx() {
+        var first = track.querySelector(".m2__tile");
         if (!first) return 0;
         return first.getBoundingClientRect().width + getGapPx();
-    };
+    }
 
-    const getTotal = () => {
+    function getTotal() {
         if (dots.length) return dots.length;
         return track.querySelectorAll(".m2__tile").length;
-    };
+    }
 
-    const getActiveIndex = () => {
-        const tiles = [...track.querySelectorAll(".m2__tile")];
-        const pos = Math.min(activePos(), Math.max(tiles.length - 1, 0));
-        const el = tiles[pos] || tiles[0];
-        return Number(el?.dataset?.m2Index ?? 0);
-    };
+    function getActiveIndex() {
+        var tiles = Array.from(track.querySelectorAll(".m2__tile"));
+        if (!tiles.length) return 0;
+        var pos = window.innerWidth >= 768 ? 3 : 1;
+        var el = tiles[Math.min(pos, tiles.length - 1)];
+        var dataIndex = el && el.dataset && el.dataset.m2Index;
+        return dataIndex ? Number(dataIndex) : 0;
+    }
 
-    const updateDots = () => {
-        const idx = getActiveIndex();
-        dots.forEach((btn, i) => {
-            const active = i === idx;
+    function updateDots() {
+        var idx = getActiveIndex();
+        dots.forEach(function (btn, i) {
+            var active = i === idx;
             btn.classList.toggle("is-active", active);
             btn.setAttribute("aria-current", active ? "true" : "false");
         });
-    };
+    }
 
-    const moveNext = () => {
+    function moveNext() {
         if (state.animating) return;
         state.animating = true;
 
-        const step = getStepPx();
-        if (!step) { state.animating = false; return; }
+        var step = getStepPx();
+        if (!step) {
+            state.animating = false;
+            return;
+        }
 
-        track.style.transition = prefersReduced ? "none" : "transform 300ms ease-out";
-        track.style.transform = `translateX(-${step}px)`;
-
-        const finish = () => {
+        function finish() {
             track.removeEventListener("transitionend", finish);
             track.style.transition = "none";
             track.appendChild(track.firstElementChild);
@@ -66,110 +63,187 @@ function initModulo2(root) {
             void track.offsetHeight;
             state.animating = false;
             updateDots();
-        };
+        }
 
         if (prefersReduced) {
             track.appendChild(track.firstElementChild);
+            track.style.transition = "none";
             track.style.transform = "translateX(0px)";
             state.animating = false;
             updateDots();
-        } else {
-            track.addEventListener("transitionend", finish);
+            return;
         }
-    };
 
-    const movePrev = () => {
+        track.style.transition = "transform 300ms ease-out";
+        track.style.transform = "translateX(-" + step + "px)";
+        track.addEventListener("transitionend", finish);
+    }
+
+    function movePrev() {
         if (state.animating) return;
         state.animating = true;
 
-        const step = getStepPx();
-        if (!step) { state.animating = false; return; }
+        var step = getStepPx();
+        if (!step) {
+            state.animating = false;
+            return;
+        }
 
-        track.style.transition = "none";
-        track.insertBefore(track.lastElementChild, track.firstElementChild);
-        track.style.transform = `translateX(-${step}px)`;
-        void track.offsetHeight;
-
-        track.style.transition = prefersReduced ? "none" : "transform 300ms ease-out";
-        track.style.transform = "translateX(0px)";
-
-        const finish = () => {
+        function finish() {
             track.removeEventListener("transitionend", finish);
             track.style.transition = "none";
             state.animating = false;
             updateDots();
-        };
+        }
+
+        track.style.transition = "none";
+        track.insertBefore(track.lastElementChild, track.firstElementChild);
+        track.style.transform = "translateX(-" + step + "px)";
+        void track.offsetHeight;
 
         if (prefersReduced) {
             track.style.transform = "translateX(0px)";
             state.animating = false;
             updateDots();
-        } else {
-            track.addEventListener("transitionend", finish);
+            return;
         }
-    };
 
-    const moveToIndex = (target) => {
-        const current = getActiveIndex();
+        track.style.transition = "transform 300ms ease-out";
+        track.style.transform = "translateX(0px)";
+        track.addEventListener("transitionend", finish);
+    }
+
+    function moveToIndex(target) {
+        var current = getActiveIndex();
         if (target === current) return;
 
-        const total = getTotal();
+        var total = getTotal();
         if (!total) return;
 
-        const forward = (target - current + total) % total;
-        const backward = (current - target + total) % total;
+        var forward = (target - current + total) % total;
+        var backward = (current - target + total) % total;
 
-        const dir = forward <= backward ? "next" : "prev";
-        let steps = Math.min(forward, backward);
+        var dir = forward <= backward ? "next" : "prev";
+        var steps = Math.min(forward, backward);
 
-        const run = () => {
+        function run() {
             if (steps <= 0) return;
-            steps -= 1;
-            dir === "next" ? moveNext() : movePrev();
+            steps = steps - 1;
 
-            const wait = () => {
-                if (!state.animating) run();
-                else requestAnimationFrame(wait);
-            };
+            if (dir === "next") {
+                moveNext();
+            } else {
+                movePrev();
+            }
+
+            function wait() {
+                if (!state.animating) {
+                    run();
+                } else {
+                    requestAnimationFrame(wait);
+                }
+            }
             wait();
-        };
+        }
 
         run();
-    };
+    }
 
-    // Dots
-    dots.forEach((btn) => {
-        btn.addEventListener("click", () => moveToIndex(Number(btn.dataset.m2Dot)));
+    dots.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            moveToIndex(Number(btn.dataset.m2Dot));
+        });
     });
 
-    // Swipe
-    let startX = 0;
-    root.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; }, { passive: true });
-    root.addEventListener("touchend", (e) => {
-        const endX = e.changedTouches[0].clientX;
-        const diff = startX - endX;
-        if (Math.abs(diff) > 40) diff > 0 ? moveNext() : movePrev();
+    var DRAG_THRESHOLD = 40;
+    var startX = 0;
+    var startY = 0;
+    var dragging = false;
+    var moved = false;
+    var pointerId = null;
+
+    root.addEventListener("click", function (e) {
+        if (!moved) return;
+        var link = e.target.closest("a");
+        if (link) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }, true);
+
+    root.addEventListener("pointerdown", function (e) {
+        if (e.pointerType === "mouse" && e.button !== 0) return;
+        if (state.animating) return;
+
+        pointerId = e.pointerId;
+        root.setPointerCapture(pointerId);
+
+        startX = e.clientX;
+        startY = e.clientY;
+        dragging = true;
+        moved = false;
     });
 
-    // Teclado (opcional)
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowRight") moveNext();
-        if (e.key === "ArrowLeft") movePrev();
+    root.addEventListener("pointermove", function (e) {
+        if (!dragging || e.pointerId !== pointerId) return;
+
+        var dx = e.clientX - startX;
+        var dy = e.clientY - startY;
+
+        if (Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(dy)) {
+            moved = true;
+        }
     });
+
+    function endDrag(e) {
+        if (!dragging || e.pointerId !== pointerId) return;
+
+        var endX = e.clientX;
+        var diff = startX - endX;
+
+        dragging = false;
+
+        if (Math.abs(diff) > DRAG_THRESHOLD) {
+            if (diff > 0) {
+                moveNext();
+            } else {
+                movePrev();
+            }
+        }
+
+        window.setTimeout(function () {
+            moved = false;
+        }, 100);
+
+        try {
+            root.releasePointerCapture(pointerId);
+        } catch (err) { }
+
+        pointerId = null;
+    }
+
+    root.addEventListener("pointerup", endDrag);
+    root.addEventListener("pointercancel", endDrag);
 
     window.addEventListener("resize", updateDots);
-
     updateDots();
 }
 
-function boot() {
-    document.querySelectorAll("[data-m2]").forEach(initModulo2);
+function bootModulo2() {
+    var carousels = document.querySelectorAll("[data-m2]");
+    for (var i = 0; i < carousels.length; i++) {
+        initModulo2(carousels[i]);
+    }
 }
 
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot);
-} else {
-    boot();
-}
+if (typeof window !== "undefined" && !window.__m2Booted) {
+    window.__m2Booted = true;
 
-document.addEventListener("astro:after-swap", boot);
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", bootModulo2);
+    } else {
+        bootModulo2();
+    }
+
+    document.addEventListener("astro:after-swap", bootModulo2);
+}

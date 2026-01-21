@@ -1,0 +1,112 @@
+---
+const WHATSAPP_NUMBER = "50662262628";
+const EMAIL_TO = "alternativefocus4media@gmail.com";
+---
+
+<div
+  class="modal"
+  id="contact-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="contact-modal-title"
+  aria-describedby="contact-modal-desc"
+  hidden
+>
+  <div class="modal__backdrop" data-close-contact-modal></div>
+
+  <div class="modal__panel" role="document">
+    <button class="modal__close" type="button" data-close-contact-modal aria-label="Cerrar">
+      ×
+    </button>
+
+    <h2 class="modal__title" id="contact-modal-title">Contactar</h2>
+    <p class="modal__desc" id="contact-modal-desc">
+      Al enviar, se abrirá WhatsApp o tu correo con el mensaje listo para enviar.
+    </p>
+
+    <form
+      class="contact-form"
+      id="contact-form"
+      novalidate
+      data-whatsapp-number={WHATSAPP_NUMBER}
+      data-email-to={EMAIL_TO}
+    >
+      <div class="contact-form__row">
+        <label class="contact-form__label" for="cf-name">Nombre *</label>
+        <input
+          class="contact-form__input"
+          id="cf-name"
+          name="name"
+          type="text"
+          autocomplete="name"
+          required
+          minlength="3"
+        />
+      </div>
+
+      <div class="contact-form__grid">
+        <div class="contact-form__row">
+          <label class="contact-form__label" for="cf-email">Email</label>
+          <input
+            class="contact-form__input"
+            id="cf-email"
+            name="email"
+            type="email"
+            autocomplete="email"
+          />
+        </div>
+
+        <div class="contact-form__row">
+          <label class="contact-form__label" for="cf-phone">Teléfono</label>
+          <input
+            class="contact-form__input"
+            id="cf-phone"
+            name="phone"
+            type="tel"
+            autocomplete="tel"
+            inputmode="tel"
+          />
+        </div>
+      </div>
+
+      <p class="contact-form__hint">
+        Debes completar al menos <strong>email o teléfono</strong>.
+      </p>
+
+      <div class="contact-form__row">
+        <label class="contact-form__label" for="cf-message">Mensaje *</label>
+        <textarea
+          class="contact-form__textarea"
+          id="cf-message"
+          name="message"
+          rows="5"
+          required
+          minlength="10"
+        ></textarea>
+      </div>
+
+      <div class="contact-form__privacy">
+        <span class="tooltip">
+          <button class="tooltip__trigger" type="button" aria-describedby="privacy-tip">
+            Privacidad
+          </button>
+          <span class="tooltip__bubble" id="privacy-tip" role="tooltip">
+            La información brindada no se usará para retener información.
+          </span>
+        </span>
+      </div>
+
+      <p class="contact-form__error" id="contact-form-error" role="alert" aria-live="polite" hidden></p>
+
+      <div class="contact-form__actions">
+        <button class="btn btn--primary" type="button" data-send="whatsapp">
+          Enviar por WhatsApp
+        </button>
+
+        <button class="btn btn--secondary" type="button" data-send="email">
+          Enviar por Email
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

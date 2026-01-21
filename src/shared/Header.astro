@@ -19,8 +19,13 @@ const base = rawBase.endsWith("/") ? rawBase : `${rawBase}/`;
       <a class="site-header__link" href={`${base}#about`}>Sobre mí</a>
     </nav>
 
-    <a class="btn btn--secondary site-header__cta" href={`${base}#contact`}>
+    <button
+      class="btn btn--secondary site-header__cta"
+      type="button"
+      data-open-contact-modal
+      aria-haspopup="dialog"
+    >
       Contactar
-    </a>
+    </button>
   </div>
 </header>

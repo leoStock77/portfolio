@@ -2,6 +2,8 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import Header from "../shared/Header.astro";
 import Footer from "../shared/Footer.astro";
+import ContactModal from "../shared/ContactModal.astro";
+
 import SectionHero from "../sections/SectionHero.astro";
 import SectionModulo2_Carousel from "../sections/SectionModulo2_Carousel.astro";
 ---
@@ -9,12 +11,16 @@ import SectionModulo2_Carousel from "../sections/SectionModulo2_Carousel.astro";
 <MainLayout title="LeoStock77 — Inicio">
   <Header slot="header" />
 
-  <main class="main-content">
+  <!-- OJO: MainLayout ya tiene <main>, así que aquí usamos un div -->
+  <div class="main-content">
     <SectionHero />
     <SectionModulo2_Carousel />
 
     <!-- Más placeholders... -->
-  </main>
+  </div>
+
+  <!-- IMPORTANTE: el modal debe existir en el DOM -->
+  <ContactModal />
 
   <Footer slot="footer" />
 </MainLayout>

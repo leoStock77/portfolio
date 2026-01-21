@@ -1,18 +1,22 @@
-/* Module 2 — Infinite Tiles Carousel (curva + fade) */
+/* Module 2 — Reference look: edge-to-edge, no borders/shadows, 6 visibles + peek del 7 */
 
 .m2 {
-    padding: var(--space-2xl) var(--space-m);
+    padding: var(--space-3xl) 0;
     background: var(--color-bg-primary);
+    overflow: hidden;
 }
 
 .m2__inner {
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 100%;
+    margin: 0;
 }
 
+/* Header centrado pero carrusel full width */
 .m2__header {
+    max-width: 1100px;
+    margin: 0 auto var(--space-xl);
+    padding: 0 var(--space-l);
     text-align: center;
-    margin-bottom: var(--space-xl);
 }
 
 .m2__title {
@@ -27,66 +31,77 @@
     color: var(--color-text-secondary);
 }
 
-/* Container */
+/* Carousel */
 .m2__carousel {
     position: relative;
     overflow: hidden;
+    touch-action: pan-y;
+    cursor: grab;
 }
 
-/* Fade edges (desktop feel) */
+.m2__carousel:active {
+    cursor: grabbing;
+}
+
+/* Fade edges */
 .m2__carousel::before,
 .m2__carousel::after {
     content: "";
     position: absolute;
     top: 0;
-    width: 16%;
     height: 100%;
     z-index: 2;
     pointer-events: none;
-    opacity: 0;
-    /* se activa en desktop */
 }
 
 .m2__carousel::before {
     left: 0;
+    width: 12%;
     background: linear-gradient(to right, var(--color-bg-primary) 0%, rgba(245, 245, 240, 0) 100%);
 }
 
 .m2__carousel::after {
     right: 0;
+    width: 12%;
     background: linear-gradient(to left, var(--color-bg-primary) 0%, rgba(245, 245, 240, 0) 100%);
 }
 
-/* Track */
+/* Track: pegado */
 .m2__track {
     display: flex;
-    gap: var(--space-m);
-    transform: translateX(0px);
+    gap: 0;
+    padding: 0;
+    margin: 0;
     will-change: transform;
-    padding: 6px 0;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
-/* Mobile: tiles más pequeños + peek */
+/* Tiles (base mobile) */
 .m2__tile {
-    flex: 0 0 74vw;
     text-decoration: none;
     color: inherit;
+    display: block;
+    flex: 0 0 86vw;
+    /* 1 grande + peek del siguiente */
 }
 
+/* Frame: sin borde/radius/sombra */
 .m2__frame {
+    width: 100%;
+    aspect-ratio: 3 / 4;
     position: relative;
-    aspect-ratio: 1;
     overflow: hidden;
-    border: 1px solid var(--color-border);
-    background: var(--color-white);
-    box-shadow: var(--shadow-sm);
-    transition: transform 250ms ease-out, box-shadow 250ms ease-out, opacity 250ms ease-out;
 
-    /* Curva orgánica */
-    clip-path: polygon(0% 0%, 2% 1%, 4% 2%, 6% 2.5%, 8% 3%, 10% 3.2%,
-            90% 0%, 92% 2%, 94% 3%, 96% 3.5%, 98% 3.8%, 100% 4%,
-            100% 96%, 98% 97%, 96% 98%, 94% 98.5%, 92% 99%, 90% 99.2%,
-            10% 100%, 8% 98.5%, 6% 97.5%, 4% 97%, 2% 96.5%, 0% 96%);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: #000;
+
+    /* Mata cualquier regla vieja tipo "arco" */
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
 }
 
 .m2__tile:focus-visible .m2__frame {
@@ -99,35 +114,25 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    transform: scale(1.02);
-    transition: transform 250ms ease-out;
+    transform: none;
 }
 
+/* Overlay */
 .m2__overlay {
     position: absolute;
     inset: 0;
-    display: grid;
-    align-items: end;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, .55) 100%);
+    display: flex;
+    align-items: flex-end;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.65) 100%);
 }
 
 .m2__label {
-    padding: 14px 14px 16px;
+    padding: 16px 16px 18px;
     color: #fff;
-    font-weight: 600;
-    font-size: 14px;
+    font-weight: 650;
+    font-size: 15px;
     line-height: 1.2;
-}
-
-@media (hover: hover) {
-    .m2__tile:hover .m2__frame {
-        transform: translateY(-3px) scale(1.01);
-        box-shadow: var(--shadow-md);
-    }
-
-    .m2__tile:hover .m2__img {
-        transform: scale(1.08);
-    }
+    pointer-events: none;
 }
 
 /* Dots */
@@ -154,50 +159,24 @@
     transform: scale(1.25);
 }
 
-/* Desktop: 5 visibles + arco + fades activos */
+/* Desktop: 6 visibles + peek del 7 */
 @media (min-width: 768px) {
-    .m2 {
-        padding: var(--space-3xl) var(--space-l);
-    }
-
     .m2__title {
         font-size: var(--fs-h2);
     }
 
-    .m2__track {
-        gap: var(--space-l);
+    .m2__carousel::before,
+    .m2__carousel::after {
+        width: 6%;
     }
 
     .m2__tile {
-        flex: 0 0 calc((100% - (var(--space-l) * 4)) / 5);
+        flex: 0 0 15.8%;
+        /* 6*15.8=94.8% => ~5.2% de “peek” del 7 */
     }
 
-    .m2__carousel::before,
-    .m2__carousel::after {
-        opacity: 1;
-    }
-
-    /* Efecto arco: los laterales “caen” y se atenúan */
-    .m2__tile:nth-child(1) .m2__frame,
-    .m2__tile:nth-child(7) .m2__frame {
-        transform: translateY(18px) scale(0.92);
-        opacity: 0.65;
-    }
-
-    .m2__tile:nth-child(2) .m2__frame,
-    .m2__tile:nth-child(6) .m2__frame {
-        transform: translateY(10px) scale(0.96);
-        opacity: 0.8;
-    }
-
-    .m2__tile:nth-child(3) .m2__frame,
-    .m2__tile:nth-child(5) .m2__frame {
-        transform: translateY(3px) scale(1.0);
-        opacity: 1;
-    }
-
-    .m2__tile:nth-child(4) .m2__frame {
-        transform: translateY(0px) scale(1.02);
-        opacity: 1;
+    .m2__label {
+        font-size: 16px;
+        padding: 18px 18px 20px;
     }
 }
